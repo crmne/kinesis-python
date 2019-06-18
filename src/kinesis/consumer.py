@@ -31,14 +31,13 @@ class ShardReader(SubprocessLoop):
         self.record_queue = record_queue
         self.error_queue = error_queue
         self.boto3_session = boto3_session or boto3.Session()
-        self.kinesis_client = kinesis_client or self.boto3_session.client('kinesis')
+        self.client = kinesis_client or self.boto3_session.client('kinesis')
         self.sleep_time = sleep_time or self.DEFAULT_SLEEP_TIME
         self.start()
 
     def begin(self):
         """Begin the shard reader main loop"""
         log.info("Shard reader for %s starting", self.shard_id)
-        self.client = self.boto3_session.client('kinesis')
         self.retries = 0
 
     def loop(self):
